@@ -1,0 +1,20 @@
+name: fx_state
+description: "A tiny, predictable state-management toolkit for Flutter: reactive Store, event-driven Bloc, UI builders, routing with middleware, and scoped services."
+version: 0.0.1
+homepage: https://github.com/abqamar/fx_state
+repository: https://github.com/abqamar/fx_state
+issue_tracker: https://github.com/abqamar/fx_state/issues
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  test: ^1.25.0
+  lints: ^4.0.0
