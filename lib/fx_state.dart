@@ -15,3 +15,7 @@ export 'src/flutter/fx_selector.dart';
 export 'src/flutter/fx_provider.dart';
 export 'src/flutter/fx_nav.dart';
 export 'src/flutter/fx_routes.dart';
+export 'src/flutter/fx_platform.dart';
+export 'src/flutter/fx_ui.dart';
+export 'src/flutter/fx_view.dart';
+export 'src/flutter/fx_widgets.dart';

@@ -21,7 +21,7 @@ A tiny, predictable state-management toolkit for Flutter:
 
 ```yaml
 dependencies:
-  fx_state: ^0.0.1
+  fx_state: ^0.0.2
 ```
 
 Import:
@@ -232,3 +232,134 @@ final args = context.fxArgs<Map<String, dynamic>>();
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+
+---
+
+## Platform-aware view + dialogs/sheets/snacks
+
+### FxView
+
+`FxView` chooses a page shell based on the running platform:
+- Apple platforms: Cupertino by default
+- Others: Material
+- iOS 26+: enables a translucent ("Liquid Glass") flavor automatically (best-effort detection)
+
+```dart
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FxView(
+      title: const Text('Settings'),
+      trailing: CupertinoButton(
+        padding: EdgeInsets.zero,
+        onPressed: () => FxUI.snack(context, message: 'Saved'),
+        child: const Text('Save'),
+      ),
+      child: const Center(child: Text('Content')),
+    );
+  }
+}
+```
+
+### FxUI helpers
+
+```dart
+FxUI.snack(context, message: 'Hello');
+
+await FxUI.dialog(
+  context: context,
+  title: const Text('Confirm'),
+  content: const Text('Continue?'),
+  actions: [
+    TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('No')),
+    TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Yes')),
+  ],
+);
+
+await FxUI.sheet(
+  context: context,
+  child: Container(
+    padding: const EdgeInsets.all(16),
+    child: const Text('Bottom sheet'),
+  ),
+);
+```
+
+### Forcing behavior (optional)
+
+```dart
+FxPlatformConfig.setGlobal(
+  const FxPlatformConfig(
+    forceUiFamily: FxUiFamily.cupertino,
+    forceIosFlavor: FxIosFlavor.liquidGlass,
+  ),
+);
+```
+
+
+---
+
+## Adaptive widgets (no platform `if/else` in your app)
+
+Use these when you want one widget that renders native-looking UI on:
+- Material platforms (Android/Web/Windows/Linux)
+- Cupertino platforms (iOS/macOS)
+- iOS 26+ "Liquid Glass" flavor (blur/translucent surfaces where applicable)
+
+### Common widgets
+
+```dart
+FxTextFormField(
+  placeholder: 'Email',
+  keyboardType: TextInputType.emailAddress,
+  validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+);
+
+FxButton(
+  style: FxButtonStyle.filled,
+  onPressed: () {},
+  child: const Text('Submit'),
+);
+
+FxSwitch(value: true, onChanged: (v) {});
+FxCheckbox(value: true, onChanged: (v) {});
+FxBadge(text: 'NEW');
+FxCard(child: const Text('Card content'));
+FxProgress(type: FxProgressType.circular);
+FxSlider(value: 0.5, onChanged: (v) {});
+```
+
+### Date / time pickers (adaptive)
+
+```dart
+final date = await FxDatePicker.pickDate(context: context);
+final time = await FxDatePicker.pickTime(context: context);
+final range = await FxDatePicker.pickDateRange(context: context);
+```
+
+### Tabs
+
+```dart
+FxTabs(
+  tabs: [
+    FxTabItem(label: 'Info', child: InfoView()),
+    FxTabItem(label: 'History', child: HistoryView()),
+  ],
+);
+```
+
+### Popup menu
+
+```dart
+FxPopupMenuButton<String>(
+  items: const [
+    FxMenuItem(value: 'edit', label: 'Edit'),
+    FxMenuItem(value: 'delete', label: 'Delete', isDestructive: true),
+  ],
+  onSelected: (v) {},
+  child: const Icon(Icons.more_vert),
+);
+```
